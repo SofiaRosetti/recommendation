@@ -83,8 +83,8 @@ if (isset($_POST["id_utente"])) {
       }
       // echo json_encode($both_users);
 
-      if (!isset($similarity[$service1['id_servizio']][$service2['id_servizio']]) ||
-      !isset($similarity[$service2['id_servizio']][$service1['id_servizio']])) {
+      // if (!isset($similarity[$service1['id_servizio']][$service2['id_servizio']]) ||
+      // !isset($similarity[$service2['id_servizio']][$service1['id_servizio']])) {
         // echo "ciao\n";
 
         $numerator = 0;
@@ -115,12 +115,65 @@ if (isset($_POST["id_utente"])) {
         // if ($service1['id_servizio'] == 1 && $service2['id_servizio'] == 5) {
         //   echo json_encode($final_res);echo "\n";echo "\n";
         // }
-      }
+      // }
     }
   }
 
-  echo json_encode($similarity);
+  // echo json_encode($similarity);echo "\n";echo "\n";
+  // foreach ($similarity as $sim) {
+  //   echo json_encode($sim);echo "\n";echo "\n";
+  // }
+  // for ($i = 1; $i <= count($similarity); $i++) {
+  //   for ($j = 1; $j <= count($similarity); $j++) {
+  //     echo json_encode($similarity[$i][$j]);echo "\n";
+  //   }
+  // }
+  // $i = 1; $j = 4;
+  // echo json_encode($similarity[$i][$j]);echo "\n";
+  // echo json_encode($similarity[1][5]);echo "\n";
+  // echo json_encode($similarity[5][1]);echo "\n";
+  // echo json_encode($similarity[40][7]);echo "\n";
+  // echo json_encode($similarity[7][5]);echo "\n";
+  // echo json_encode($similarity[31][17]);echo "\n";
+  // echo json_encode($similarity[17][31]);echo "\n";
+  // echo json_encode(count($similarity));echo "\n";
 
+  // foreach ($services_id as $s1) {
+  //   foreach ($services_id as $s2) {
+  //     echo json_encode($similarity[$s1['id_servizio']][$s2['id_servizio']]);echo "\n";
+  //   }
+  // }
+
+  $NN = [];
+  for ($i = 1; $i <= count($similarity); $i++) {
+    // echo json_encode($similarity[$i]);echo "\n";echo "\n";
+    arsort($similarity[$i]);
+    // echo json_encode($similarity[$i]);echo "\n";echo "\n";echo "\n";echo "\n";
+    $NN[$i] = array_slice($similarity[$i], 0, 5, true);
+    // echo json_encode($NN[$i]);echo "\n";echo "\n";
+  }
+
+  $item_target = 6;
+  $prediction_numerator = 0;
+  $prediction_denominator = 0;
+  $prediction = 0;
+  foreach ($NN[$item_target] as $neighbour => $value) {
+    // echo "id servizio => ";echo json_encode($neighbour);echo "\n"; // ID servizio
+    // echo "similarità con item 1 => ";echo json_encode($value);echo "\n"; // similarità
+    // echo "rating utente per servizio corrente => ";echo json_encode($user_ratings[$input_user][$neighbour]);echo "\n";
+
+    $current_rating = $user_ratings[$input_user][$neighbour];
+    $prediction_numerator += $value * $current_rating;
+    $prediction_denominator += $value;
+  }
+
+  if ($prediction_denominator != 0) {
+    $prediction = $prediction_numerator / $prediction_denominator;
+    $prediction = round($prediction);
+  }
+
+
+  echo "prediction per item 1 - utente 1 => ";echo json_encode($prediction);echo "\n";
 
 
 
