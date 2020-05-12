@@ -16,26 +16,19 @@ if (isset($_POST["id_utente"])) {
     $query_services = $dbCon->prepare('SELECT id_servizio FROM service');
     $query_services->execute(array());
     $services_id = $query_services->fetchAll(PDO::FETCH_ASSOC);
-    // echo json_encode($services_id);
     $user = [];
     foreach ($services_id as $ids) {
       $query_ratings = $dbCon->prepare('SELECT rating FROM rating WHERE id_servizio = ? AND id_utente = ?');
       $query_ratings->execute(array($ids['id_servizio'], $idu['id_utente']));
       $rating = $query_ratings->fetch(PDO::FETCH_ASSOC);
       if ($rating['rating'] != null) {
-        // echo json_encode($rating);echo "\n";
         $user[$ids['id_servizio']] = $rating['rating'];
-        // $user_ratings[$ids['id_servizio']][$idu['id_utente']] = $rating['rating'];
       } else {
         $user[$ids['id_servizio']] = 0;
-        // $user_ratings[$ids['id_servizio']][$idu['id_utente']] = 0;
       }
     }
     $user_ratings[$idu['id_utente']] = $user;
   }
-
-  // echo json_encode($user_ratings);echo "\n";
-  // echo json_encode($services_id);
 
   $sum_ratings_service1 = 0;
   $count_ratings_service1 = 0;
@@ -54,20 +47,13 @@ if (isset($_POST["id_utente"])) {
       }
     }
     $avg = $sum_ratings_service / $count_ratings_service;
-    // echo json_encode($avg); echo "\n";
     $avg_ratings[$service['id_servizio']] = $avg;
   }
-
-  // echo json_encode($avg_ratings);echo "\n";echo "\n";
 
   $similarity = [];
 
   foreach ($services_id as $service1) {
     foreach ($services_id as $service2) {
-      // echo json_encode($service1['id_servizio']);
-      // echo json_encode($service2['id_servizio']);echo "\n";
-      // echo "servizio "; echo json_encode($service1['id_servizio']); echo " e ";
-      // echo "servizio "; echo json_encode($service2['id_servizio']); echo "\n";
       $both_users = [];
       foreach ($users_id as $u) {
         $rating1 = $user_ratings[$u['id_utente']][$service1['id_servizio']];
@@ -75,83 +61,40 @@ if (isset($_POST["id_utente"])) {
         if ($rating1 != 0 && $rating2 != 0 && $service1['id_servizio'] != $service2['id_servizio']) {
           //  se entro qui significa che l'utente corrente ha votato entrambi i servizi
           array_push($both_users, $u);
-
-          // echo json_encode($u);echo "\n";
-          // echo "servizio "; echo json_encode($service1); echo "  "; echo json_encode($rating1);echo "\n";
-          // echo "servizio "; echo json_encode($service2); echo "  "; echo json_encode($rating2);echo "\n";echo "\n";
-
         }
       }
-      // echo json_encode($both_users);
 
-      // if (!isset($similarity[$service1['id_servizio']][$service2['id_servizio']]) ||
-      // !isset($similarity[$service2['id_servizio']][$service1['id_servizio']])) {
-        // echo "ciao\n";
+      $numerator = 0;
+      $denominator1 = 0;
+      $denominator2 = 0;
+      $denominator = 0;
 
-        $numerator = 0;
-        $denominator1 = 0;
-        $denominator2 = 0;
-        $denominator = 0;
+      foreach ($both_users as $both) {
+        $ru1 = $user_ratings[$both['id_utente']][$service1['id_servizio']];
+        $ru2 = $user_ratings[$both['id_utente']][$service2['id_servizio']];
+        $numerator1 = $ru1 - $avg_ratings[$service1['id_servizio']];
+        $numerator2 = $ru2 - $avg_ratings[$service2['id_servizio']];
+        $numerator += $numerator1 * $numerator2;
+        $denominator1 += pow($numerator1, 2);
+        $denominator2 += pow($numerator2, 2);
+      }
 
-        foreach ($both_users as $both) {
-          $ru1 = $user_ratings[$both['id_utente']][$service1['id_servizio']];
-          $ru2 = $user_ratings[$both['id_utente']][$service2['id_servizio']];
-          $numerator1 = $ru1 - $avg_ratings[$service1['id_servizio']];
-          $numerator2 = $ru2 - $avg_ratings[$service2['id_servizio']];
-          $numerator += $numerator1 * $numerator2;
-          $denominator1 += pow($numerator1, 2);
-          $denominator2 += pow($numerator2, 2);
-          // echo json_encode($numerator);echo "\n";
-        }
+      $denominator = sqrt($denominator1) * sqrt($denominator2);
+      if ($denominator == 0) {
+        $final_res = 0;
+      } else {
+        $final_res = $numerator / $denominator;
+      }
 
-        $denominator = sqrt($denominator1) * sqrt($denominator2);
-        if ($denominator == 0) {
-          $final_res = 0;
-        } else {
-          $final_res = $numerator / $denominator;
-        }
+      $similarity[$service1['id_servizio']][$service2['id_servizio']] = $final_res;
 
-        $similarity[$service1['id_servizio']][$service2['id_servizio']] = $final_res;
-        // echo json_encode($final_res);echo "\n";
-        // if ($service1['id_servizio'] == 1 && $service2['id_servizio'] == 5) {
-        //   echo json_encode($final_res);echo "\n";echo "\n";
-        // }
-      // }
     }
   }
 
-  // echo json_encode($similarity);echo "\n";echo "\n";
-  // foreach ($similarity as $sim) {
-  //   echo json_encode($sim);echo "\n";echo "\n";
-  // }
-  // for ($i = 1; $i <= count($similarity); $i++) {
-  //   for ($j = 1; $j <= count($similarity); $j++) {
-  //     echo json_encode($similarity[$i][$j]);echo "\n";
-  //   }
-  // }
-  // $i = 1; $j = 4;
-  // echo json_encode($similarity[$i][$j]);echo "\n";
-  // echo json_encode($similarity[1][5]);echo "\n";
-  // echo json_encode($similarity[5][1]);echo "\n";
-  // echo json_encode($similarity[40][7]);echo "\n";
-  // echo json_encode($similarity[7][5]);echo "\n";
-  // echo json_encode($similarity[31][17]);echo "\n";
-  // echo json_encode($similarity[17][31]);echo "\n";
-  // echo json_encode(count($similarity));echo "\n";
-
-  // foreach ($services_id as $s1) {
-  //   foreach ($services_id as $s2) {
-  //     echo json_encode($similarity[$s1['id_servizio']][$s2['id_servizio']]);echo "\n";
-  //   }
-  // }
-
   $NN = [];
   for ($i = 1; $i <= count($similarity); $i++) {
-    // echo json_encode($similarity[$i]);echo "\n";echo "\n";
     arsort($similarity[$i]);
-    // echo json_encode($similarity[$i]);echo "\n";echo "\n";echo "\n";echo "\n";
     $NN[$i] = array_slice($similarity[$i], 0, 5, true);
-    // echo json_encode($NN[$i]);echo "\n";echo "\n";
   }
 
 
