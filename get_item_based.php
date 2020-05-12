@@ -3,6 +3,7 @@ include 'db_connect.php';
 if (isset($_POST["id_utente"])) {
   $input_user = $_POST['id_utente'];
   $input_user = intval($input_user);
+  $item_target = $_POST['id_servizio'];
 
   // carico i voti di ogni utente per ogni servizio
   $query_users = $dbCon->prepare('SELECT id_utente FROM user');
@@ -153,7 +154,7 @@ if (isset($_POST["id_utente"])) {
     // echo json_encode($NN[$i]);echo "\n";echo "\n";
   }
 
-  $item_target = 6;
+
   $prediction_numerator = 0;
   $prediction_denominator = 0;
   $prediction = 0;
@@ -173,7 +174,9 @@ if (isset($_POST["id_utente"])) {
   }
 
 
-  echo "prediction per item 1 - utente 1 => ";echo json_encode($prediction);echo "\n";
+  echo "prediction per item "; echo json_encode($item_target);
+  echo " e user "; echo json_encode($input_user); echo " => ";
+  echo json_encode($prediction);echo "\n";
 
 
 

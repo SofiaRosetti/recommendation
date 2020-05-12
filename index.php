@@ -14,22 +14,23 @@
     <div>
       <label for="algorithms">Select algorithm:</label>
       <select id="algorithms" name="algorithms">
-        <option value="item">Collaborative item-based</option>
-        <option value="user">Collaborative user-based</option>
-        <option value="knowledge">Knowledge-based</option>
-        <option value="item-knowledge">Hybrid item-based and knowledge-based</option>
-        <option value="user-knowledge">Hybrid user-based and knowledge-based</option>
+        <option value="1">Collaborative item-based</option>
+        <option value="2">Collaborative user-based</option>
+        <option value="3">Knowledge-based</option>
+        <option value="4">Hybrid item-based and knowledge-based</option>
+        <option value="5">Hybrid user-based and knowledge-based</option>
       </select>
     </div>
     <br /><br />
     <div>
       <label for="users">Select user:</label>
       <select id="users" name="users">
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-        <option value="5">5</option>
+      </select>
+    </div>
+    <br /><br />
+    <div id="item_div">
+      <label for="items">Select service:</label>
+      <select id="items" name="item">
       </select>
     </div>
     <br /><br />
@@ -44,29 +45,105 @@
 
     <script>
       $(document).ready(function(){
-        var user = null;
-        var users_id_list = null;
-        $("#submit_button").click(function() {
-          user = $('#users').val();
-          console.log(user);
-          var json_data = {
-            "id_utente" : user
-          }
-          $.ajax({
-           type: "POST",
-           url: "get_item_based.php",
-           data: json_data,
-           success: function(msg)
-           {
-             console.log(msg);
-             users_id_list = msg;   // ORA HO GLI ID DEGLI UTENTI
-           },
-           error: function(msg) {
-             console.log(msg);
-           }
-         });
+
+        $.ajax({
+         type: "POST",
+         url: "get_users.php",
+         data: "",
+         success: function(msg)
+         {
+           // console.log(msg);
+            updateUsers(JSON.parse(msg));
+         },
+         error: function(msg) {
+           console.log(msg);
+         }
         });
+
+        $.ajax({
+         type: "POST",
+         url: "get_services.php",
+         data: "",
+         success: function(msg)
+         {
+           // console.log(msg);
+            updateServices(JSON.parse(msg));
+         },
+         error: function(msg) {
+           console.log(msg);
+         }
+        });
+
+       function updateUsers(msg) {
+         msg.forEach(function(item) {
+           // console.log(item['id_utente']);
+           var list = document.getElementById("users");
+           var option = document.createElement("option");
+           option.text = item['id_utente'];
+           list.add(option);
+         });
+       }
+
+       function updateServices(msg) {
+         msg.forEach(function(item) {
+           // console.log(item['id_servizio']);
+           var list = document.getElementById("items");
+           var option = document.createElement("option");
+           option.text = item['id_servizio'];
+           list.add(option);
+         });
+       }
+
+      var alg = null;
+      var user = null;
+      var item = null;
+      var myUrl = null;
+      $("#submit_button").click(function() {
+        user = $('#users').val();
+        item = $('#items').val();
+        alg = $('#algorithms').val();
+        console.log(alg);
+        console.log(user);
+        console.log(item);
+
+        switch (alg) {
+          case "1":
+            myUrl = "get_item_based.php"
+            break;
+          case "2":
+            myUrl = "get_user_based.php"
+            break;
+          case "3":
+            myUrl = "get_knowledge_based.php"
+            break;
+          case "4":
+            myUrl = "get_item_knowledge_based.php"
+            break;
+          case "5":
+            myUrl = "get_user_knowledge_based.php"
+            break;
+          default:
+            myUrl = ""
+        }
+
+        var json_data = {
+          "id_utente" : user,
+          "id_servizio" : item
+        }
+        $.ajax({
+         type: "POST",
+         url: myUrl,
+         data: json_data,
+         success: function(msg)
+         {
+           console.log(msg);
+         },
+         error: function(msg) {
+           console.log(msg);
+         }
+       });
       });
+    });
 
 
     </script>
