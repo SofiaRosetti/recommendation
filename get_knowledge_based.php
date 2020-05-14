@@ -1,12 +1,8 @@
 <?php
 include 'db_connect.php';
-
-// si consigliano all'utente gli item che non ha ancora votato
-// e che appartengono a una delle categorie di item da lui preferite
-
 if (isset($_POST["id_utente"])) {
   $input_user = $_POST['id_utente'];
-
+  // compute($input_user,$dbCon);
   // carico le categorie preferite dall'utente
   $query_cat = $dbCon->prepare('SELECT id_categoria FROM user_category WHERE id_utente = ?');
   $query_cat->execute(array($input_user));
@@ -23,8 +19,8 @@ if (isset($_POST["id_utente"])) {
   $placeholders = array_fill(0, count($cat_values), '?');
   $query_items = $dbCon->prepare('SELECT r.id_servizio, s.id_categoria FROM rating1000 as r
     INNER JOIN service40 as s ON s.id_servizio=r.id_servizio
-    WHERE id_categoria IN ('.implode(',', $placeholders).') AND r.id_servizio
-    NOT IN (SELECT id_servizio FROM rating1000 WHERE id_utente = ?) GROUP BY id_servizio');
+    WHERE s.id_categoria IN ('.implode(',', $placeholders).') AND r.id_servizio
+    NOT IN (SELECT id_servizio FROM rating1000 WHERE id_utente = ?) GROUP BY r.id_servizio');
   $string = [];
   foreach ($cat_values as $c) {
     array_push($string, $c);
@@ -33,5 +29,37 @@ if (isset($_POST["id_utente"])) {
   $query_items->execute($string);
   $itemsToSuggest = $query_items->fetchAll(PDO::FETCH_ASSOC);
 
-  echo json_encode($itemsToSuggest);
+  echo "items to suggest => "; echo json_encode($itemsToSuggest);
+}
+
+function compute ($input_user,$dbCon) {
+  // include 'db_connect.php';
+  // // carico le categorie preferite dall'utente
+  // $query_cat = $dbCon->prepare('SELECT id_categoria FROM user_category WHERE id_utente = ?');
+  // $query_cat->execute(array($input_user));
+  // $categories = $query_cat->fetchAll(PDO::FETCH_ASSOC);
+  //
+  // // echo json_encode($categories);
+  // $cat_values = [];
+  // foreach ($categories as $cat) {
+  //   array_push($cat_values, (intval($cat['id_categoria'])));
+  // }
+  //
+  //
+  // // carico gli item da consigliare
+  // $placeholders = array_fill(0, count($cat_values), '?');
+  // $query_items = $dbCon->prepare('SELECT r.id_servizio, s.id_categoria FROM rating1000 as r
+  //   INNER JOIN service40 as s ON s.id_servizio=r.id_servizio
+  //   WHERE s.id_categoria IN ('.implode(',', $placeholders).') AND r.id_servizio
+  //   NOT IN (SELECT id_servizio FROM rating1000 WHERE id_utente = ?) GROUP BY r.id_servizio');
+  // $string = [];
+  // foreach ($cat_values as $c) {
+  //   array_push($string, $c);
+  // }
+  // array_push($string, $input_user);
+  // $query_items->execute($string);
+  // $itemsToSuggest = $query_items->fetchAll(PDO::FETCH_ASSOC);
+  //
+  // echo "items to suggest => "; echo json_encode($itemsToSuggest);
+
 }

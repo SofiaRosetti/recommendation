@@ -17,7 +17,7 @@ if (isset($_POST["id_utente"])) {
 
   foreach ($users_id as $idu) {
     $user_services = [];
-    $sql = "SELECT id_servizio FROM service";
+    $sql = "SELECT id_servizio FROM service40";
     $result = mysqli_query($mysqli, $sql);
     $services_id = $result->fetch_all(MYSQLI_ASSOC); // ID DEI SERVIZI
 
@@ -41,7 +41,7 @@ if (isset($_POST["id_utente"])) {
       $pearson[$user] = pearsonCorr($full_users_services[$input_user], $full_users_services[$user]);
     }
   }
-  echo json_encode($pearson);echo "\n";
+  // echo "PEARSON =>";echo json_encode($pearson);echo "\n";echo "\n";
 
   foreach (array_keys($pearson) as $possible_neighbour) {
     if ($pearson[$possible_neighbour] < 0 || !$pearson[$possible_neighbour]) {
@@ -53,7 +53,7 @@ if (isset($_POST["id_utente"])) {
   arsort($pearson);
   $NN = array_slice($pearson, 0, 5,true);
 
-  echo json_encode($pearson);echo "\n";
+  // echo "PEARSON =>";echo json_encode($pearson);echo "\n";echo "\n";
 
   $itemsToRecommend = [];
 
@@ -150,7 +150,7 @@ function getItemsToPredict($input_user, $NN, $mysqli, $dbCon) {
   array_push($string, $input_user);
   $stm->execute($string);
   $services_list = $stm->fetchAll(PDO::FETCH_ASSOC);
-  echo "services_list -> "; echo json_encode($services_list);echo "\n";
+  // echo "services_list -> "; echo json_encode($services_list);echo "\n";
   return $services_list;
 }
 

@@ -102,34 +102,59 @@
         user = $('#users').val();
         item = $('#items').val();
         alg = $('#algorithms').val();
-        console.log(alg);
-        console.log(user);
-        console.log(item);
+        // console.log(alg);
+        // console.log(user);
+        // console.log(item);
+
+        var json_data = null;
 
         switch (alg) {
           case "1":
-            myUrl = "get_item_based.php"
+            myUrl = "get_item_based.php";
+            json_data = {
+              "id_utente" : user,
+              "id_servizio" : item,
+              "knowledge" : 0
+            }
             break;
           case "2":
-            myUrl = "get_user_based.php"
+            myUrl = "get_user_knowledge_based.php";
+            json_data = {
+              "id_utente" : user,
+              "id_servizio" : item,
+              "knowledge" : 0
+            }
             break;
           case "3":
-            myUrl = "get_knowledge_based.php"
+            myUrl = "get_knowledge_based.php";
+            json_data = {
+              "id_utente" : user,
+              "id_servizio" : item,
+              "knowledge" : 1
+            }
             break;
           case "4":
-            myUrl = "get_item_knowledge_based.php"
+            myUrl = "get_item_knowledge_based.php";
+            json_data = {
+              "id_utente" : user,
+              "id_servizio" : item,
+              "knowledge" : 1
+            }
             break;
           case "5":
-            myUrl = "get_user_knowledge_based.php"
+            myUrl = "get_user_knowledge_based.php";
+            var k = 1;
+            json_data = {
+              "id_utente" : user,
+              "id_servizio" : item,
+              "knowledge" : k
+            }
             break;
           default:
             myUrl = ""
         }
 
-        var json_data = {
-          "id_utente" : user,
-          "id_servizio" : item
-        }
+
         $.ajax({
          type: "POST",
          url: myUrl,
