@@ -2,6 +2,7 @@
 include 'db_connect.php';
 if (isset($_POST["id_utente"])) {
   $input_user = $_POST['id_utente'];
+  $item_target = $_POST['id_servizio'];
   // compute($input_user,$dbCon);
   // carico le categorie preferite dall'utente
   $query_cat = $dbCon->prepare('SELECT id_categoria FROM user_category WHERE id_utente = ?');

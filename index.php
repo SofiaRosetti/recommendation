@@ -110,7 +110,7 @@
 
         switch (alg) {
           case "1":
-            myUrl = "get_item_based.php";
+            myUrl = "get_item_knowledge_based.php";
             json_data = {
               "id_utente" : user,
               "id_servizio" : item,

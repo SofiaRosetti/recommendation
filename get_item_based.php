@@ -95,6 +95,7 @@ if (isset($_POST["id_utente"])) {
   for ($i = 1; $i <= count($similarity); $i++) {
     arsort($similarity[$i]);
     $NN[$i] = array_slice($similarity[$i], 0, 5, true);
+    echo "NN di "; echo json_encode($i); echo " => "; echo json_encode($NN[$i]);echo "\n";
   }
 
 
