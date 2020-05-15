@@ -42,13 +42,18 @@ h2 {
 
 #select_div {
   margin: auto;
-  width: 35%;
+  width: 45%;
 }
 
 select {
   float: right;
   height: 25px;
   font-size: 16px;
+  margin-right: 5%;
+}
+
+.label_select {
+  margin-left: 5%;
 }
 
 #btn_div {
@@ -75,4 +80,17 @@ select {
 
 #rec_div div {
   margin-bottom: 10px;
+}
+
+
+@media screen and (max-width: 1200px) {
+  #select_div {
+    width: 100%;
+  }
+}
+
+@media screen and (max-width: 1200px) and (min-width: 800px) {
+  #select_div {
+    width: 70%;
+  }
 }

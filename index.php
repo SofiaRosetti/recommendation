@@ -9,11 +9,11 @@
 
   <body>
     <div id="title">
-      <h2>Recommendations algorithms</h2>
+      <h2>Recommendation Algorithms</h2>
     </div>
     <div id="select_div">
       <div>
-        <label for="algorithms">Select algorithm:</label>
+        <label class="label_select" for="algorithms">Select algorithm:</label>
         <select id="algorithms" name="algorithms">
           <option value="1">Collaborative item-based</option>
           <option value="2">Collaborative user-based</option>
@@ -24,13 +24,13 @@
       </div>
       <br /><br />
       <div class="num">
-        <label for="users">Select user:</label>
+        <label class="label_select" for="users">Select user:</label>
         <select id="users" name="users">
         </select>
       </div>
       <br /><br />
       <div id="item_div" class="num">
-        <label for="items">Select service:</label>
+        <label class="label_select" for="items">Select service:</label>
         <select id="items" name="item">
         </select>
       </div>
