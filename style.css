@@ -28,6 +28,7 @@ footer, header, hgroup, menu, nav, section {
 body {
   margin: 15px;
   padding: 10px;
+  background-color: #ccfff5;
 }
 
 h2 {
