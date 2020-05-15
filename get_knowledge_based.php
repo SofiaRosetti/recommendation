@@ -28,6 +28,16 @@ if (isset($_POST["id_utente"])) {
   array_push($string, $input_user);
   $query_items->execute($string);
   $itemsToSuggest = $query_items->fetchAll(PDO::FETCH_ASSOC);
+  $showing_list = [];
+  foreach ($itemsToSuggest as $i) {
+    array_push($showing_list, intval($i['id_servizio']));
+  }
 
-  echo "items to suggest => "; echo json_encode($itemsToSuggest);
+  if (empty($showing_list)) {
+    echo "L'utente ha già votato tutti i servizi presenti nelle categorie preferite";
+  } else {
+    echo "Servizi consigliati per utente "; echo json_encode(intval($input_user));
+    echo " => "; echo json_encode($showing_list);
+  }
+
 }

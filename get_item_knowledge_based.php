@@ -121,8 +121,8 @@ if (isset($_POST["id_utente"])) {
         $prediction = round($prediction);
       }
 
-      echo "prediction per item "; echo json_encode($item_target);
-      echo " e user "; echo json_encode($input_user); echo " => ";
+      echo "Predizione per servizio "; echo json_encode(intval($item_target));
+      echo " e utente "; echo json_encode($input_user); echo " => ";
       echo json_encode($prediction);echo "\n";
     } else {
       if ($use_knowledge == 1) {

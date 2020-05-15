@@ -71,11 +71,16 @@ if (isset($_POST["id_utente"])) {
         $itemsToRecommend[$id] = prediction($full_users_services, $pearson, $input_user, $id);
       }
       arsort($itemsToRecommend);
-      echo "itemsToRecommend -> "; echo json_encode($itemsToRecommend);echo "\n";
+
+      echo "Servizi consigliati per utente "; echo json_encode($input_user);
+      echo ", con relativa predizione => ";echo "<br />";
+      foreach (array_keys($itemsToRecommend) as $key) {
+        echo "servizio "; echo json_encode($key);
+        echo " con predizione "; echo json_encode($itemsToRecommend[$key]);
+        echo "<br />";
+      }
     }
   } else {
-    // echo "use_knowledge => ";echo json_encode($use_knowledge);echo "\n";
-    // echo "input_user => ";echo json_encode($input_user);echo "\n";
     if ($use_knowledge == 1) {
       include 'get_knowledge_based.php';
     } else {
