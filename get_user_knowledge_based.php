@@ -52,12 +52,9 @@ if (isset($_POST["id_utente"])) {
     }
   }
 
-
   arsort($pearson);
   $NN = array_slice($pearson, 0, 5,true);
-
   // echo json_encode($pearson);echo "\n";
-
   $itemsToRecommend = [];
 
   if (count($NN) > 0) {
@@ -82,7 +79,7 @@ if (isset($_POST["id_utente"])) {
     if ($use_knowledge == 1) {
       include 'get_knowledge_based.php';
     } else {
-      echo "Nessun NN";echo "\n";
+      echo "L'utente selezionato non ha nessun nearest neighbour NN";echo "\n";
     }
   }
 }
@@ -114,7 +111,6 @@ function pearsonCorr($userinput_ratings, $newuser_ratings) {
 
     // echo "sumRatingsUser -> "; echo json_encode($sumRatingsUser);echo "\n";
     // echo "countRatingsUser -> "; echo json_encode($countRatingsUser);echo "\n";
-
 
     $avgRatingInputUser = $sumRatingsInputUser / $countRatingsInputUser;
     if ($countRatingsUser != 0) {
@@ -159,8 +155,6 @@ function pearsonCorr($userinput_ratings, $newuser_ratings) {
   } else {
     return 0;
   }
-
-
 }
 
 function getItemsToPredict($input_user, $NN, $mysqli, $dbCon) {

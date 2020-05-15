@@ -98,7 +98,6 @@ if (isset($_POST["id_utente"])) {
     $NN[$i] = array_slice($similarity[$i], 0, 5, true);
     // echo "NN di "; echo json_encode($i); echo " => "; echo json_encode($NN[$i]);echo "\n";
   }
-  // $NN[33] = [];
   if (count($NN[$item_target]) > 0) {
     $prediction_numerator = 0;
     $prediction_denominator = 0;
@@ -129,7 +128,7 @@ if (isset($_POST["id_utente"])) {
       if ($use_knowledge == 1) {
         include 'get_knowledge_based.php';
       } else {
-        echo "L'utente non ha votato nessun servizio simile";echo "\n";
+        echo "L'utente selezionato non ha votato nessun servizio simile";echo "\n";
       }
     }
   } else {
@@ -137,7 +136,7 @@ if (isset($_POST["id_utente"])) {
     if ($use_knowledge == 1) {
       include 'get_knowledge_based.php';
     } else {
-      echo "Nessun NN";echo "\n";
+      echo "Il servizio selezionato non ha nessun servizio simile (NN)";echo "\n";
     }
   }
 }
