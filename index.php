@@ -3,38 +3,41 @@
     <meta charset="UTF-8">
     <script src="jquery-3.3.1.js"></script>
 
-    <!-- <link rel="stylesheet" type="text/css" href="style.css"> -->
+    <link rel="stylesheet" type="text/css" href="style.css">
     <title>Tesi</title>
   </head>
 
   <body>
-    <div>
+    <div id="title">
       <h2>Recommendations algorithms</h2>
     </div>
-    <div>
-      <label for="algorithms">Select algorithm:</label>
-      <select id="algorithms" name="algorithms">
-        <option value="1">Collaborative item-based</option>
-        <option value="2">Collaborative user-based</option>
-        <option value="3">Knowledge-based</option>
-        <option value="4">Hybrid item-based and knowledge-based</option>
-        <option value="5">Hybrid user-based and knowledge-based</option>
-      </select>
+    <div id="select_div">
+      <div>
+        <label for="algorithms">Select algorithm:</label>
+        <select id="algorithms" name="algorithms">
+          <option value="1">Collaborative item-based</option>
+          <option value="2">Collaborative user-based</option>
+          <option value="3">Knowledge-based</option>
+          <option value="4">Hybrid item-based and knowledge-based</option>
+          <option value="5">Hybrid user-based and knowledge-based</option>
+        </select>
+      </div>
+      <br /><br />
+      <div class="num">
+        <label for="users">Select user:</label>
+        <select id="users" name="users">
+        </select>
+      </div>
+      <br /><br />
+      <div id="item_div" class="num">
+        <label for="items">Select service:</label>
+        <select id="items" name="item">
+        </select>
+      </div>
     </div>
+
     <br /><br />
-    <div>
-      <label for="users">Select user:</label>
-      <select id="users" name="users">
-      </select>
-    </div>
-    <br /><br />
-    <div id="item_div">
-      <label for="items">Select service:</label>
-      <select id="items" name="item">
-      </select>
-    </div>
-    <br /><br />
-    <div>
+    <div id="btn_div">
       <button id="submit_button" type="button" onclick="">Get recommendations</button>
     </div>
     <div id="rec_div">
@@ -161,6 +164,10 @@
          data: json_data,
          success: function(msg)
          {
+           var res = document.getElementById("rec_div");
+           var newDiv = document.createElement("div");
+           newDiv.innerHTML = msg;
+           res.appendChild(newDiv);
            console.log(msg);
          },
          error: function(msg) {
