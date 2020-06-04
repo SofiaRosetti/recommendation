@@ -165,9 +165,12 @@ function pearsonCorr($userinput_ratings, $newuser_ratings) {
 function getItemsToPredict($input_user, $NN, $mysqli, $dbCon) {
   $placeholders = array_fill(0, count($NN), '?');
 
-  $stm = $dbCon->prepare('SELECT id_servizio FROM rating1000 WHERE id_utente IN ('.implode(',', $placeholders).') AND
-  id_servizio NOT IN (SELECT id_servizio FROM rating1000 WHERE id_utente = ?)
-  GROUP BY id_servizio;');
+  $stm = $dbCon->prepare('SELECT r.id_servizio FROM rating1000 as r
+    INNER JOIN service40 as s ON s.id_servizio=r.id_servizio
+    WHERE s.disabilita = true
+    AND id_utente IN ('.implode(',', $placeholders).') AND
+  s.id_servizio NOT IN (SELECT id_servizio FROM rating1000 WHERE id_utente = ?)
+  GROUP BY r.id_servizio;');
 
   $string = [];
   foreach (array_keys($NN) as $id) {
