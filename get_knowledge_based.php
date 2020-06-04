@@ -19,7 +19,8 @@ if (isset($_POST["id_utente"])) {
   $placeholders = array_fill(0, count($cat_values), '?');
   $query_items = $dbCon->prepare('SELECT r.id_servizio, s.id_categoria FROM rating1000 as r
     INNER JOIN service40 as s ON s.id_servizio=r.id_servizio
-    WHERE s.id_categoria IN ('.implode(',', $placeholders).') AND r.id_servizio
+    WHERE s.id_categoria IN ('.implode(',', $placeholders).') AND s.disabilita = 1
+    AND r.id_servizio
     NOT IN (SELECT id_servizio FROM rating1000 WHERE id_utente = ?) GROUP BY r.id_servizio');
   $string = [];
   foreach ($cat_values as $c) {
