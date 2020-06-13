@@ -8,7 +8,7 @@ if (isset($_POST["id_utente"])) {
   $use_knowledge = $_POST['knowledge'];
   // printf("input user %s\n\n\n", $input_user);
   // printf("knowledge %s\n\n\n", $use_knowledge);
-  $sql = "SELECT id_utente FROM user";
+  $sql = "SELECT id_utente FROM user100";
 
   $result = mysqli_query($mysqli, $sql);
   $myObj = new \stdClass();
@@ -20,7 +20,7 @@ if (isset($_POST["id_utente"])) {
 
   foreach ($users_id as $idu) {
     $user_services = [];
-    $sql = "SELECT id_servizio FROM service40";
+    $sql = "SELECT id_servizio FROM service500";
     $result = mysqli_query($mysqli, $sql);
     $services_id = $result->fetch_all(MYSQLI_ASSOC); // ID DEI SERVIZI
 
@@ -166,7 +166,7 @@ function getItemsToPredict($input_user, $NN, $mysqli, $dbCon) {
   $placeholders = array_fill(0, count($NN), '?');
 
   $stm = $dbCon->prepare('SELECT r.id_servizio FROM rating1000 as r
-    INNER JOIN service40 as s ON s.id_servizio=r.id_servizio
+    INNER JOIN service500 as s ON s.id_servizio=r.id_servizio
     WHERE s.disabilita = true
     AND id_utente IN ('.implode(',', $placeholders).') AND
   s.id_servizio NOT IN (SELECT id_servizio FROM rating1000 WHERE id_utente = ?)

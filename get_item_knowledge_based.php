@@ -7,19 +7,19 @@ if (isset($_POST["id_utente"])) {
   $use_knowledge = $_POST['knowledge'];
 
   // carico i voti di ogni utente per ogni servizio
-  $query_users = $dbCon->prepare('SELECT id_utente FROM user');
+  $query_users = $dbCon->prepare('SELECT id_utente FROM user100');
   $query_users->execute(array());
   $users_id = $query_users->fetchAll(PDO::FETCH_ASSOC);
 
   $user_ratings = [];
   foreach ($users_id as $idu) {
 
-    $query_services = $dbCon->prepare('SELECT id_servizio FROM service');
+    $query_services = $dbCon->prepare('SELECT id_servizio FROM service500');
     $query_services->execute(array());
     $services_id = $query_services->fetchAll(PDO::FETCH_ASSOC);
     $user = [];
     foreach ($services_id as $ids) {
-      $query_ratings = $dbCon->prepare('SELECT rating FROM rating WHERE id_servizio = ? AND id_utente = ?');
+      $query_ratings = $dbCon->prepare('SELECT rating FROM rating1000 WHERE id_servizio = ? AND id_utente = ?');
       $query_ratings->execute(array($ids['id_servizio'], $idu['id_utente']));
       $rating = $query_ratings->fetch(PDO::FETCH_ASSOC);
       if ($rating['rating'] != null) {
