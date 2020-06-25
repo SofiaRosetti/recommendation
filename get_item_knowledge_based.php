@@ -12,11 +12,11 @@ if (isset($_POST["id_utente"])) {
   $users_id = $query_users->fetchAll(PDO::FETCH_ASSOC);
 
   $user_ratings = [];
+  $query_services = $dbCon->prepare('SELECT id_servizio FROM service500');
+  $query_services->execute(array());
+  $services_id = $query_services->fetchAll(PDO::FETCH_ASSOC);
   foreach ($users_id as $idu) {
 
-    $query_services = $dbCon->prepare('SELECT id_servizio FROM service500');
-    $query_services->execute(array());
-    $services_id = $query_services->fetchAll(PDO::FETCH_ASSOC);
     $user = [];
     foreach ($services_id as $ids) {
       $query_ratings = $dbCon->prepare('SELECT rating FROM rating1000 WHERE id_servizio = ? AND id_utente = ?');

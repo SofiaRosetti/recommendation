@@ -18,11 +18,12 @@ if (isset($_POST["id_utente"])) {
   $full_users_services = [];
   $users_id = $result->fetch_all(MYSQLI_ASSOC); // ID DEGLI UTENTI
 
+  $sql = "SELECT id_servizio FROM service500";
+  $result = mysqli_query($mysqli, $sql);
+  $services_id = $result->fetch_all(MYSQLI_ASSOC); // ID DEI SERVIZI
+
   foreach ($users_id as $idu) {
     $user_services = [];
-    $sql = "SELECT id_servizio FROM service500";
-    $result = mysqli_query($mysqli, $sql);
-    $services_id = $result->fetch_all(MYSQLI_ASSOC); // ID DEI SERVIZI
 
     foreach ($services_id as $ids) {
       $sql = "SELECT rating FROM rating1000 WHERE id_servizio = '$ids[id_servizio]' AND id_utente = '$idu[id_utente]'";
