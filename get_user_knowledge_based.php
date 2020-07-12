@@ -6,8 +6,17 @@ if (isset($_POST["id_utente"])) {
   $input_user = $_POST['id_utente'];
   $input_user = intval($input_user);
   $use_knowledge = $_POST['knowledge'];
+  $input_disability = 1;
   // printf("input user %s\n\n\n", $input_user);
   // printf("knowledge %s\n\n\n", $use_knowledge);
+
+  // carico la disabilità dell'utente
+  $query_dis = $dbCon->prepare('SELECT disabilita FROM user100 WHERE id_utente = ?');
+  $query_dis->execute(array($input_user));
+  $res = $query_dis->fetchAll(PDO::FETCH_ASSOC);
+
+  $input_disability = $res[0]['disabilita'];
+
   $sql = "SELECT id_utente FROM user100";
 
   $result = mysqli_query($mysqli, $sql);
@@ -59,7 +68,7 @@ if (isset($_POST["id_utente"])) {
   $itemsToRecommend = [];
 
   if (count($NN) > 0) {
-    $itemsToPredict = getItemsToPredict($input_user, $NN, $mysqli, $dbCon);
+    $itemsToPredict = getItemsToPredict($input_user, $input_disability, $NN, $mysqli, $dbCon);
     if (empty($itemsToPredict)) {
       if ($use_knowledge == 1) {
         include 'get_knowledge_based.php';
@@ -163,12 +172,12 @@ function pearsonCorr($userinput_ratings, $newuser_ratings) {
   }
 }
 
-function getItemsToPredict($input_user, $NN, $mysqli, $dbCon) {
+function getItemsToPredict($input_user, $input_disability, $NN, $mysqli, $dbCon) {
   $placeholders = array_fill(0, count($NN), '?');
 
   $stm = $dbCon->prepare('SELECT r.id_servizio FROM rating1000 as r
     INNER JOIN service500 as s ON s.id_servizio=r.id_servizio
-    WHERE s.disabilita = true
+    WHERE (s.tipo_disabilita = ? OR s.tipo_disabilita = 3)
     AND id_utente IN ('.implode(',', $placeholders).') AND
   s.id_servizio NOT IN (SELECT id_servizio FROM rating1000 WHERE id_utente = ?)
   GROUP BY r.id_servizio;');
@@ -177,6 +186,7 @@ function getItemsToPredict($input_user, $NN, $mysqli, $dbCon) {
   foreach (array_keys($NN) as $id) {
     array_push($string, $id);
   }
+  array_push($string, $input_disability);
   array_push($string, $input_user);
   $stm->execute($string);
   $services_list = $stm->fetchAll(PDO::FETCH_ASSOC);
