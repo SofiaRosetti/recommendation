@@ -127,7 +127,7 @@ $services_list = $stm->fetchAll(PDO::FETCH_ASSOC);
 $list = [];
 foreach($services_list as $i) {
   $item_target = $i['id_servizio'];
-  echo "<br />";echo json_encode($item_target);echo "<br />";
+  // echo "<br />";echo json_encode($item_target);echo "<br />";
   if (count($NN[$item_target]) > 0) {
     $prediction_numerator = 0;
     $prediction_denominator = 0;
@@ -151,32 +151,41 @@ foreach($services_list as $i) {
         $prediction = round($prediction);
       }
 
-      echo "<br />";echo "Predizione per servizio "; echo json_encode(intval($item_target));
-      echo " e utente "; echo json_encode($input_user); echo " => ";
-      echo json_encode($prediction);echo "<br />";
+      // echo "<br />";echo "Predizione per servizio "; echo json_encode(intval($item_target));
+      // echo " e utente "; echo json_encode($input_user); echo " => ";
+      // echo json_encode($prediction);echo "<br />";
 
       $list[intval($item_target)] = $prediction;
 
     } else {
       if ($use_knowledge == 1) {
-        include 'get_knowledge_based.php';
+        // include 'get_knowledge_based.php';
       } else {
-        echo "<br />";echo "L'utente selezionato non ha votato nessun servizio simile";echo "<br />";
+        // $empty = [];
+        // echo json_encode($empty);
+        // echo "<br />";echo "L'utente selezionato non ha votato nessun servizio simile";echo "<br />";
       }
     }
   } else {
     // knowledge based
     if ($use_knowledge == 1) {
-      include 'get_knowledge_based.php';
+      // include 'get_knowledge_based.php';
     } else {
-      echo "<br />";echo "Il servizio selezionato non ha nessun servizio simile (NN)";echo "<br />";
+      // $empty = [];
+      // echo json_encode($empty);
+      // echo "<br />";echo "Il servizio selezionato non ha nessun servizio simile (NN)";echo "<br />";
     }
   }
 }
 arsort($list);
-echo json_encode(array_keys($list));echo "<br />";
+// echo json_encode(array_keys($list));echo "<br />";
 $list = array_slice($list, 0, 10, true);
-echo json_encode(array_keys($list));echo "<br />";
+if (empty($list) && $use_knowledge == 1) {
+  include 'get_knowledge_based.php';
+} else {
+  echo json_encode(array_keys($list));
+}
+
 
 $stm = $dbCon->prepare('SELECT id_servizio, AVG(rating) as a FROM rating1000 GROUP BY id_servizio');
 $stm->execute();
@@ -188,12 +197,14 @@ foreach($avg as $a) {
   // echo json_encode($a['a']);
   $services_avg_ratings[$a['id_servizio']] = $a['a'];
 }
-echo json_encode($services_avg_ratings);echo "<br />";
-foreach(array_keys($list) as $l) {
-  $str = $services_avg_ratings[intval($l)];
-  echo (int)$str;echo ",";
+
+// stampa dei rating medi
+// echo json_encode($services_avg_ratings);echo "<br />";
+// foreach(array_keys($list) as $l) {
+//   $str = $services_avg_ratings[intval($l)];
+  // echo (int)$str;echo ",";
   // echo json_encode(str_replace('"','',$str));
-}
+// }
 
 // echo json_encode($avg['id_servizio']['a']);
 }

@@ -73,7 +73,7 @@ if (isset($_POST["id_utente"])) {
       if ($use_knowledge == 1) {
         include 'get_knowledge_based.php';
       } else {
-        echo "L'utente ha già votato tutti i servizi";
+        // echo "L'utente ha già votato tutti i servizi";
       }
     } else {
       foreach ($itemsToPredict as $item) {
@@ -82,19 +82,20 @@ if (isset($_POST["id_utente"])) {
       }
       arsort($itemsToRecommend);
 
-      echo "Servizi consigliati per utente "; echo json_encode($input_user);
-      echo ", con relativa predizione => ";echo "<br />";
-      foreach (array_keys($itemsToRecommend) as $key) {
-        echo "servizio "; echo json_encode($key);
-        echo " con predizione "; echo json_encode($itemsToRecommend[$key]);
-        echo "<br />";
-      }
+      // echo "Servizi consigliati per utente "; echo json_encode($input_user);
+      // echo ", con relativa predizione => ";echo "<br />";
+      // foreach (array_keys($itemsToRecommend) as $key) {
+      //   echo "servizio "; echo json_encode($key);
+      //   echo " con predizione "; echo json_encode($itemsToRecommend[$key]);
+      //   echo "<br />";
+      // }
+      echo json_encode(array_keys($itemsToRecommend));
     }
   } else {
     if ($use_knowledge == 1) {
       include 'get_knowledge_based.php';
     } else {
-      echo "L'utente selezionato non ha nessun nearest neighbour NN";echo "\n";
+      // echo "L'utente selezionato non ha nessun nearest neighbour NN";echo "\n";
     }
   }
 }

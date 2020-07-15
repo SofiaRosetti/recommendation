@@ -45,11 +45,12 @@ if (isset($_POST["id_utente"])) {
     array_push($showing_list, intval($i['id_servizio']));
   }
 
-  if (empty($showing_list)) {
-    echo "L'utente ha già votato tutti i servizi presenti nelle categorie preferite";
-  } else {
-    echo "Servizi consigliati per utente "; echo json_encode(intval($input_user));
-    echo " => "; echo json_encode($showing_list);
-  }
+  // if (empty($showing_list)) {
+  //   echo "L'utente ha già votato tutti i servizi presenti nelle categorie preferite";
+  // } else {
+  //   echo "Servizi consigliati per utente "; echo json_encode(intval($input_user));
+  //   echo " => "; echo json_encode($showing_list);
+  // }
+  echo json_encode($showing_list);
 
 }
