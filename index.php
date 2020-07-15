@@ -84,9 +84,10 @@
 											</div>
 
 										</div>
-										<div id="spinner1" class="spinner-grow" role="status" style="display: none; height: 100px">
+                    <div id="spinner1" class="spinner-border text-dark" role="status" style="display: none">
 											<span class="sr-only">Loading...</span>
 										</div>
+
 										<div id="result1" class="col-sm-8 overflow-auto" style="max-height: 100px; height: 100px">
 
 											I servizi raccomandati per l'utente sono:<br/>
@@ -128,7 +129,9 @@
 											<div id="spinner1" class="spinner-grow" role="status" style="display: none; height: 100px">
 												<span class="sr-only">Loading...</span>
 											</div>
-											<div>Risultati:</div>
+                      <div id="spinner2" class="spinner-border text-dark" role="status" style="display: none">
+  											<span class="sr-only">Loading...</span>
+  										</div>
 											<div id="result2" class="overflow-auto" style="max-height: 100px; height: 100px">
 												I servizi raccomandati per l'utente sono:<br/>
 
@@ -171,6 +174,9 @@
 											<div id="spinner1" class="spinner-grow" role="status" style="display: none; height: 100px">
 												<span class="sr-only">Loading...</span>
 											</div>
+                      <div id="spinner3" class="spinner-border text-dark" role="status" style="display: none">
+  											<span class="sr-only">Loading...</span>
+  										</div>
 											<div id="result3" class="overflow-auto" style="max-height: 100px; height: 100px">
 												I servizi raccomandati per l'utente sono:<br/>
 												<!-- <div class="d-flex justify-content-start"> -->
@@ -224,8 +230,10 @@
 											<div id="spinner1" class="spinner-grow" role="status" style="display: none; height: 100px">
 												<span class="sr-only">Loading...</span>
 											</div>
-											<div>Risultati:</div>
-											<div id="result4" class="overflow-auto" style="max-height: 100px; height: 100px">
+                      <div id="spinner4" class="spinner-border text-dark" role="status" style="display: none">
+                        <span class="sr-only">Loading...</span>
+                      </div>
+                      <div id="result4" class="overflow-auto" style="max-height: 100px; height: 100px">
 												I servizi raccomandati per l'utente sono:<br/>
 
 											</div>
@@ -266,7 +274,9 @@
 											<div id="spinner1" class="spinner-grow" role="status" style="display: none; height: 100px">
 												<span class="sr-only">Loading...</span>
 											</div>
-											<div>Risultati:</div>
+                      <div id="spinner5" class="spinner-border text-dark" role="status" style="display: none">
+  											<span class="sr-only">Loading...</span>
+  										</div>
 											<div id="result5" class="overflow-auto" style="max-height: 100px; height: 100px">
 												I servizi raccomandati per l'utente sono:<br/>
 
@@ -371,6 +381,15 @@
     })
   });
   function startComputing(type){
+    var spin_str = "#spinner";
+    var spinner = spin_str.concat(type);
+
+    var res_str = "#result";
+    var res = res_str.concat(type);
+
+    $(spinner).css({"display": "block"});
+		$(res).css({"display": "none"});
+
     var id_us = "#sel".concat(type);
     var user = $(id_us).val();
     var json_data = null;
@@ -429,8 +448,10 @@
              success: function(msg)
              {
                console.log(msg);
-               var str1 = "#result";
-               var res = str1.concat(type);
+               $(spinner).css({"display": "none"});
+           		 $(res).css({"display": "block"});
+               // var str1 = "#result";
+               // var res = str1.concat(type);
                // console.log(res);
 
 
